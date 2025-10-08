@@ -1,0 +1,52 @@
+======================================================================
+BAYESIAN NETWORK - TEST CASE RESULTS
+======================================================================
+
+TEST CASE 1: Healthy Young Person
+----------------------------------------------------------------------
+Evidence: Age=Young, PhysicalActivity=Active, DietQuality=Good,
+          BMI=Normal, FamilyHistory=No, Smoking=No
+
+P(DiabetesRisk):
+  Low: 0.5882
+  Moderate: 0.1853
+  High: 0.1348
+  VeryHigh: 0.0918
+
+P(InsulinResistance):
+  Low: 0.8621
+  Moderate: 0.0759
+  High: 0.0621
+
+
+TEST CASE 2: High-Risk Middle-Aged Person
+----------------------------------------------------------------------
+Evidence: Age=Middle, PhysicalActivity=Sedentary, DietQuality=Poor,
+          BMI=Obese, FamilyHistory=Yes, Smoking=Yes, HbA1c=Prediabetic
+
+P(DiabetesRisk):
+  Low: 0.0352
+  Moderate: 0.1296
+  High: 0.3537
+  VeryHigh: 0.4816
+
+P(MetabolicSyndrome):
+  No: 0.2414
+  Yes: 0.7586
+
+
+TEST CASE 3: Prediabetic with Good Lifestyle
+----------------------------------------------------------------------
+Evidence: Age=Middle, PhysicalActivity=Active, DietQuality=Good,
+          BMI=Overweight, HbA1c=Prediabetic, FamilyHistory=Yes
+
+P(DiabetesRisk):
+  Low: 0.0618
+  Moderate: 0.1790
+  High: 0.3727
+  VeryHigh: 0.3865
+
+P(FastingGlucose):
+  Normal: 0.4525
+  Prediabetic: 0.2828
+  Diabetic: 0.2647

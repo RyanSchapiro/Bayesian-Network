@@ -1,0 +1,45 @@
+digraph "Diabetes_Risk_Assessment" {
+  graph [bgcolor=transparent,label="Diabetes_Risk_Assessment"];
+  node [style=filled fillcolor="#ffffaa"];
+
+"Age" [comment="0:Age{Young|Middle|Senior}"];
+"FamilyHistory" [comment="1:Family History{No|Yes}"];
+"PhysicalActivity" [comment="2:Physical Activity{Sedentary|Light|Moderate|Active}"];
+"DietQuality" [comment="3:Diet Quality{Poor|Fair|Good}"];
+"Smoking" [comment="4:Smoking{No|Yes}"];
+"BMI" [comment="5:BMI{Normal|Overweight|Obese}"];
+"BloodPressure" [comment="6:Blood Pressure{Normal|Elevated|High}"];
+"Cholesterol" [comment="7:Cholesterol{Healthy|Borderline|Poor}"];
+"InsulinResistance" [comment="8:Insulin Resistance{Low|Moderate|High}"];
+"FastingGlucose" [comment="9:Fasting Glucose{Normal|Prediabetic|Diabetic}"];
+"HbA1c" [comment="10:HbA1c{Normal|Prediabetic|Diabetic}"];
+"MetabolicSyndrome" [comment="11:Metabolic Syndrome{No|Yes}"];
+"DiabetesRisk" [comment="12:5-Year Risk{Low|Moderate|High|VeryHigh}"];
+
+  "Age" -> "BloodPressure";
+  "Age" -> "FastingGlucose";
+  "Age" -> "DiabetesRisk";
+  "Age" -> "BMI";
+  "FamilyHistory" -> "InsulinResistance";
+  "FamilyHistory" -> "DiabetesRisk";
+  "PhysicalActivity" -> "InsulinResistance";
+  "PhysicalActivity" -> "Cholesterol";
+  "PhysicalActivity" -> "BMI";
+  "DietQuality" -> "InsulinResistance";
+  "DietQuality" -> "Cholesterol";
+  "DietQuality" -> "BMI";
+  "Smoking" -> "BloodPressure";
+  "BMI" -> "InsulinResistance";
+  "BMI" -> "MetabolicSyndrome";
+  "BMI" -> "BloodPressure";
+  "BMI" -> "Cholesterol";
+  "BloodPressure" -> "MetabolicSyndrome";
+  "Cholesterol" -> "MetabolicSyndrome";
+  "InsulinResistance" -> "FastingGlucose";
+  "InsulinResistance" -> "DiabetesRisk";
+  "InsulinResistance" -> "HbA1c";
+  "FastingGlucose" -> "MetabolicSyndrome";
+  "FastingGlucose" -> "HbA1c";
+  "HbA1c" -> "DiabetesRisk";
+  "MetabolicSyndrome" -> "DiabetesRisk";
+}

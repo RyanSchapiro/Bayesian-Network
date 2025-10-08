@@ -1,0 +1,52 @@
+digraph "no_name" {
+  node [bgcolor="#AAAAAA", style=filled, height=0];
+node [shape = box];
+  "13-LifestyleIntervention";  "14-MedicalIntervention";  "15-MonitoringFrequency";
+node [shape =  hexagon, margin=0];
+  "17-HealthUtility";  "18-CostUtility";  "19-BurdenUtility";
+node [shape = ellipse];
+  "0-Age";  "1-FamilyHistory";  "2-PhysicalActivity";  "3-DietQuality";  "4-Smoking";  "5-BMI";  "6-BloodPressure";  "7-Cholesterol";  "8-InsulinResistance";  "9-FastingGlucose";  "10-HbA1c";  "11-MetabolicSyndrome";  "12-DiabetesRisk";  "16-FutureDiabetesStatus";
+
+"0-Age" -> "9-FastingGlucose";
+"0-Age" -> "6-BloodPressure";
+"0-Age" -> "12-DiabetesRisk";
+"0-Age" -> "5-BMI";
+"1-FamilyHistory" -> "8-InsulinResistance";
+"1-FamilyHistory" -> "12-DiabetesRisk";
+"2-PhysicalActivity" -> "8-InsulinResistance";
+"2-PhysicalActivity" -> "7-Cholesterol";
+"2-PhysicalActivity" -> "5-BMI";
+"3-DietQuality" -> "8-InsulinResistance";
+"3-DietQuality" -> "7-Cholesterol";
+"3-DietQuality" -> "5-BMI";
+"4-Smoking" -> "6-BloodPressure";
+"5-BMI" -> "11-MetabolicSyndrome";
+"5-BMI" -> "8-InsulinResistance";
+"5-BMI" -> "6-BloodPressure";
+"5-BMI" -> "7-Cholesterol";
+"6-BloodPressure" -> "11-MetabolicSyndrome";
+"7-Cholesterol" -> "11-MetabolicSyndrome";
+"8-InsulinResistance" -> "9-FastingGlucose";
+"8-InsulinResistance" -> "12-DiabetesRisk";
+"8-InsulinResistance" -> "10-HbA1c";
+"9-FastingGlucose" -> "11-MetabolicSyndrome";
+"9-FastingGlucose" -> "10-HbA1c";
+"10-HbA1c" -> "14-MedicalIntervention" [style="tapered, bold"];
+"10-HbA1c" -> "12-DiabetesRisk";
+"11-MetabolicSyndrome" -> "12-DiabetesRisk";
+"12-DiabetesRisk" -> "16-FutureDiabetesStatus";
+"12-DiabetesRisk" -> "15-MonitoringFrequency" [style="tapered, bold"];
+"12-DiabetesRisk" -> "13-LifestyleIntervention" [style="tapered, bold"];
+"13-LifestyleIntervention" -> "16-FutureDiabetesStatus";
+"13-LifestyleIntervention" -> "14-MedicalIntervention" [style="tapered, bold"];
+"13-LifestyleIntervention" -> "19-BurdenUtility";
+"13-LifestyleIntervention" -> "18-CostUtility";
+"14-MedicalIntervention" -> "16-FutureDiabetesStatus";
+"14-MedicalIntervention" -> "19-BurdenUtility";
+"14-MedicalIntervention" -> "15-MonitoringFrequency" [style="tapered, bold"];
+"14-MedicalIntervention" -> "18-CostUtility";
+"15-MonitoringFrequency" -> "19-BurdenUtility";
+"15-MonitoringFrequency" -> "18-CostUtility";
+"16-FutureDiabetesStatus" -> "17-HealthUtility";
+
+}

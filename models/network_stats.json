@@ -1,0 +1,27 @@
+{
+  "bayesian_network": {
+    "nodes": 13,
+    "arcs": 26,
+    "node_names": [
+      "Age",
+      "FamilyHistory",
+      "PhysicalActivity",
+      "DietQuality",
+      "Smoking",
+      "BMI",
+      "BloodPressure",
+      "Cholesterol",
+      "InsulinResistance",
+      "FastingGlucose",
+      "HbA1c",
+      "MetabolicSyndrome",
+      "DiabetesRisk"
+    ]
+  },
+  "influence_diagram": {
+    "total_nodes": 20,
+    "chance_nodes": 14,
+    "decision_nodes": 3,
+    "utility_nodes": 3
+  }
+}

@@ -1,0 +1,41 @@
+======================================================================
+DIABETES RISK ASSESSMENT - MODEL SUMMARY
+======================================================================
+
+BAYESIAN NETWORK
+----------------------------------------------------------------------
+Total Nodes: 13
+Total Arcs: 26
+
+Node List:
+  • Age: 3 states ['Young', 'Middle', 'Senior']
+  • FamilyHistory: 2 states ['No', 'Yes']
+  • PhysicalActivity: 4 states ['Sedentary', 'Light', 'Moderate', 'Active']
+  • DietQuality: 3 states ['Poor', 'Fair', 'Good']
+  • Smoking: 2 states ['No', 'Yes']
+  • BMI: 3 states ['Normal', 'Overweight', 'Obese']
+  • BloodPressure: 3 states ['Normal', 'Elevated', 'High']
+  • Cholesterol: 3 states ['Healthy', 'Borderline', 'Poor']
+  • InsulinResistance: 3 states ['Low', 'Moderate', 'High']
+  • FastingGlucose: 3 states ['Normal', 'Prediabetic', 'Diabetic']
+  • HbA1c: 3 states ['Normal', 'Prediabetic', 'Diabetic']
+  • MetabolicSyndrome: 2 states ['No', 'Yes']
+  • DiabetesRisk: 4 states ['Low', 'Moderate', 'High', 'VeryHigh']
+
+======================================================================
+INFLUENCE DIAGRAM
+----------------------------------------------------------------------
+Total Nodes: 20
+Chance Nodes: 14
+Decision Nodes: 3
+Utility Nodes: 3
+
+Decision Nodes:
+  • LifestyleIntervention: [None, Diet, Exercise, Combined]
+  • MedicalIntervention: [None, Metformin, Intensive]
+  • MonitoringFrequency: [Annual, Biannual, Quarterly, Monthly]
+
+Utility Nodes:
+  • HealthUtility: Health outcomes (QALYs)
+  • CostUtility: Intervention costs
+  • BurdenUtility: Patient burden

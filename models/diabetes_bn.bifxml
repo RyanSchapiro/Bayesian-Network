@@ -1,0 +1,606 @@
+<?xml version="1.0" ?>
+
+<BIF VERSION="0.3">
+<NETWORK>
+<NAME>Diabetes_Risk_Assessment</NAME>
+<PROPERTY>software aGrUM</PROPERTY>
+
+<!-- Variables -->
+<VARIABLE TYPE="nature">
+	<NAME>Age</NAME>
+	<PROPERTY>description = Age</PROPERTY>
+	<PROPERTY>fast = Age{Young|Middle|Senior}</PROPERTY>
+<!- OUTCOME are not used in pyAgrum BIFXML (see fast property) but are kept for compatibility->
+	<OUTCOME>Young</OUTCOME>
+	<OUTCOME>Middle</OUTCOME>
+	<OUTCOME>Senior</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>FamilyHistory</NAME>
+	<PROPERTY>description = Family History</PROPERTY>
+	<PROPERTY>fast = FamilyHistory{No|Yes}</PROPERTY>
+<!- OUTCOME are not used in pyAgrum BIFXML (see fast property) but are kept for compatibility->
+	<OUTCOME>No</OUTCOME>
+	<OUTCOME>Yes</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>PhysicalActivity</NAME>
+	<PROPERTY>description = Physical Activity</PROPERTY>
+	<PROPERTY>fast = PhysicalActivity{Sedentary|Light|Moderate|Active}</PROPERTY>
+<!- OUTCOME are not used in pyAgrum BIFXML (see fast property) but are kept for compatibility->
+	<OUTCOME>Sedentary</OUTCOME>
+	<OUTCOME>Light</OUTCOME>
+	<OUTCOME>Moderate</OUTCOME>
+	<OUTCOME>Active</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>DietQuality</NAME>
+	<PROPERTY>description = Diet Quality</PROPERTY>
+	<PROPERTY>fast = DietQuality{Poor|Fair|Good}</PROPERTY>
+<!- OUTCOME are not used in pyAgrum BIFXML (see fast property) but are kept for compatibility->
+	<OUTCOME>Poor</OUTCOME>
+	<OUTCOME>Fair</OUTCOME>
+	<OUTCOME>Good</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>Smoking</NAME>
+	<PROPERTY>description = Smoking</PROPERTY>
+	<PROPERTY>fast = Smoking{No|Yes}</PROPERTY>
+<!- OUTCOME are not used in pyAgrum BIFXML (see fast property) but are kept for compatibility->
+	<OUTCOME>No</OUTCOME>
+	<OUTCOME>Yes</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>BMI</NAME>
+	<PROPERTY>description = BMI</PROPERTY>
+	<PROPERTY>fast = BMI{Normal|Overweight|Obese}</PROPERTY>
+<!- OUTCOME are not used in pyAgrum BIFXML (see fast property) but are kept for compatibility->
+	<OUTCOME>Normal</OUTCOME>
+	<OUTCOME>Overweight</OUTCOME>
+	<OUTCOME>Obese</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>BloodPressure</NAME>
+	<PROPERTY>description = Blood Pressure</PROPERTY>
+	<PROPERTY>fast = BloodPressure{Normal|Elevated|High}</PROPERTY>
+<!- OUTCOME are not used in pyAgrum BIFXML (see fast property) but are kept for compatibility->
+	<OUTCOME>Normal</OUTCOME>
+	<OUTCOME>Elevated</OUTCOME>
+	<OUTCOME>High</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>Cholesterol</NAME>
+	<PROPERTY>description = Cholesterol</PROPERTY>
+	<PROPERTY>fast = Cholesterol{Healthy|Borderline|Poor}</PROPERTY>
+<!- OUTCOME are not used in pyAgrum BIFXML (see fast property) but are kept for compatibility->
+	<OUTCOME>Healthy</OUTCOME>
+	<OUTCOME>Borderline</OUTCOME>
+	<OUTCOME>Poor</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>InsulinResistance</NAME>
+	<PROPERTY>description = Insulin Resistance</PROPERTY>
+	<PROPERTY>fast = InsulinResistance{Low|Moderate|High}</PROPERTY>
+<!- OUTCOME are not used in pyAgrum BIFXML (see fast property) but are kept for compatibility->
+	<OUTCOME>Low</OUTCOME>
+	<OUTCOME>Moderate</OUTCOME>
+	<OUTCOME>High</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>FastingGlucose</NAME>
+	<PROPERTY>description = Fasting Glucose</PROPERTY>
+	<PROPERTY>fast = FastingGlucose{Normal|Prediabetic|Diabetic}</PROPERTY>
+<!- OUTCOME are not used in pyAgrum BIFXML (see fast property) but are kept for compatibility->
+	<OUTCOME>Normal</OUTCOME>
+	<OUTCOME>Prediabetic</OUTCOME>
+	<OUTCOME>Diabetic</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>HbA1c</NAME>
+	<PROPERTY>description = HbA1c</PROPERTY>
+	<PROPERTY>fast = HbA1c{Normal|Prediabetic|Diabetic}</PROPERTY>
+<!- OUTCOME are not used in pyAgrum BIFXML (see fast property) but are kept for compatibility->
+	<OUTCOME>Normal</OUTCOME>
+	<OUTCOME>Prediabetic</OUTCOME>
+	<OUTCOME>Diabetic</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>MetabolicSyndrome</NAME>
+	<PROPERTY>description = Metabolic Syndrome</PROPERTY>
+	<PROPERTY>fast = MetabolicSyndrome{No|Yes}</PROPERTY>
+<!- OUTCOME are not used in pyAgrum BIFXML (see fast property) but are kept for compatibility->
+	<OUTCOME>No</OUTCOME>
+	<OUTCOME>Yes</OUTCOME>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>DiabetesRisk</NAME>
+	<PROPERTY>description = 5-Year Risk</PROPERTY>
+	<PROPERTY>fast = DiabetesRisk{Low|Moderate|High|VeryHigh}</PROPERTY>
+<!- OUTCOME are not used in pyAgrum BIFXML (see fast property) but are kept for compatibility->
+	<OUTCOME>Low</OUTCOME>
+	<OUTCOME>Moderate</OUTCOME>
+	<OUTCOME>High</OUTCOME>
+	<OUTCOME>VeryHigh</OUTCOME>
+</VARIABLE>
+
+<!-- Probability distributions -->
+<DEFINITION>
+	<FOR>Age</FOR>
+	<TABLE>
+		0.35 0.4 0.25
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>FamilyHistory</FOR>
+	<TABLE>
+		0.7 0.3
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>PhysicalActivity</FOR>
+	<TABLE>
+		0.3 0.35 0.25 0.1
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>DietQuality</FOR>
+	<TABLE>
+		0.25 0.5 0.25
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>Smoking</FOR>
+	<TABLE>
+		0.82 0.18
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>BMI</FOR>
+	<GIVEN>PhysicalActivity</GIVEN>
+	<GIVEN>DietQuality</GIVEN>
+	<GIVEN>Age</GIVEN>
+	<TABLE>
+		0.1 0.3 0.6
+		-0.02 0.316 0.704
+		-0.14 0.332 0.808
+		0.22 0.284 0.496
+		0.1 0.3 0.6
+		-0.02 0.316 0.704
+		0.34 0.268 0.392
+		0.22 0.284 0.496
+		0.1 0.3 0.6
+		0.22 0.284 0.496
+		0.1 0.3 0.6
+		-0.02 0.316 0.704
+		0.34 0.268 0.392
+		0.22 0.284 0.496
+		0.1 0.3 0.6
+		0.46 0.252 0.288
+		0.34 0.268 0.392
+		0.22 0.284 0.496
+		0.34 0.268 0.392
+		0.22 0.284 0.496
+		0.1 0.3 0.6
+		0.46 0.252 0.288
+		0.34 0.268 0.392
+		0.22 0.284 0.496
+		0.58 0.236 0.184
+		0.46 0.252 0.288
+		0.34 0.268 0.392
+		0.46 0.252 0.288
+		0.34 0.268 0.392
+		0.22 0.284 0.496
+		0.58 0.236 0.184
+		0.46 0.252 0.288
+		0.34 0.268 0.392
+		0.7 0.22 0.08
+		0.58 0.236 0.184
+		0.46 0.252 0.288
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>BloodPressure</FOR>
+	<GIVEN>BMI</GIVEN>
+	<GIVEN>Age</GIVEN>
+	<GIVEN>Smoking</GIVEN>
+	<TABLE>
+		0.85 0.15 0
+		0.65 0.23 0.12
+		0.7 0.21 0.09
+		0.5 0.29 0.21
+		0.5 0.29 0.21
+		0.3 0.37 0.33
+		0.65 0.23 0.12
+		0.45 0.31 0.24
+		0.5 0.29 0.21
+		0.3 0.37 0.33
+		0.3 0.37 0.33
+		0.1 0.45 0.45
+		0.45 0.31 0.24
+		0.25 0.39 0.36
+		0.3 0.37 0.33
+		0.1 0.45 0.45
+		0.1 0.45 0.45
+		0.1 0.35 0.55
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>Cholesterol</FOR>
+	<GIVEN>BMI</GIVEN>
+	<GIVEN>DietQuality</GIVEN>
+	<GIVEN>PhysicalActivity</GIVEN>
+	<TABLE>
+		0.4 0.425 0.175
+		0.55 0.35 0.1
+		0.63 0.31 0.06
+		0.7 0.25 0.05
+		0.6 0.325 0.075
+		0.75 0.2 0.05
+		0.83 0.12 0.05
+		0.9 0.05 0.05
+		0.8 0.15 0.05
+		0.95 4.16334e-17 0.05
+		1.03 -0.08 0.05
+		1.1 -0.15 0.05
+		0.2 0.525 0.275
+		0.35 0.45 0.2
+		0.43 0.41 0.16
+		0.5 0.375 0.125
+		0.4 0.425 0.175
+		0.55 0.35 0.1
+		0.63 0.31 0.06
+		0.7 0.25 0.05
+		0.6 0.325 0.075
+		0.75 0.2 0.05
+		0.83 0.12 0.05
+		0.9 0.05 0.05
+		0.15 0.475 0.375
+		0.15 0.55 0.3
+		0.23 0.51 0.26
+		0.3 0.475 0.225
+		0.2 0.525 0.275
+		0.35 0.45 0.2
+		0.43 0.41 0.16
+		0.5 0.375 0.125
+		0.4 0.425 0.175
+		0.55 0.35 0.1
+		0.63 0.31 0.06
+		0.7 0.25 0.05
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>InsulinResistance</FOR>
+	<GIVEN>BMI</GIVEN>
+	<GIVEN>PhysicalActivity</GIVEN>
+	<GIVEN>DietQuality</GIVEN>
+	<GIVEN>FamilyHistory</GIVEN>
+	<TABLE>
+		0.697674 0.166279 0.136047
+		0.48 0.286 0.234
+		0.75 0.1375 0.1125
+		0.545455 0.25 0.204545
+		0.789474 0.115789 0.0947368
+		0.6 0.22 0.18
+		0.719424 0.154317 0.126259
+		0.506329 0.271519 0.222152
+		0.769231 0.126923 0.103846
+		0.571429 0.235714 0.192857
+		0.806452 0.106452 0.0870968
+		0.625 0.20625 0.16875
+		0.754717 0.134906 0.110377
+		0.551724 0.246552 0.201724
+		0.8 0.11 0.09
+		0.615385 0.211538 0.173077
+		0.833333 0.0916667 0.075
+		0.666667 0.183333 0.15
+		0.793651 0.113492 0.0928571
+		0.606061 0.216667 0.177273
+		0.833333 0.0916667 0.075
+		0.666667 0.183333 0.15
+		0.862069 0.0758621 0.062069
+		0.714286 0.157143 0.128571
+		0.535714 0.255357 0.208929
+		0.315789 0.376316 0.307895
+		0.6 0.22 0.18
+		0.375 0.34375 0.28125
+		0.652174 0.191304 0.156522
+		0.428571 0.314286 0.257143
+		0.561798 0.241011 0.197191
+		0.338983 0.363559 0.297458
+		0.625 0.20625 0.16875
+		0.4 0.33 0.27
+		0.675676 0.178378 0.145946
+		0.454545 0.3 0.245455
+		0.606061 0.216667 0.177273
+		0.380952 0.340476 0.278571
+		0.666667 0.183333 0.15
+		0.444444 0.305556 0.25
+		0.714286 0.157143 0.128571
+		0.5 0.275 0.225
+		0.657895 0.188158 0.153947
+		0.434783 0.31087 0.254348
+		0.714286 0.157143 0.128571
+		0.5 0.275 0.225
+		0.757576 0.133333 0.109091
+		0.555556 0.244444 0.2
+		0.418994 0.319553 0.261453
+		0.223881 0.426866 0.349254
+		0.483871 0.283871 0.232258
+		0.272727 0.4 0.327273
+		0.539568 0.253237 0.207194
+		0.319149 0.374468 0.306383
+		0.44484 0.305338 0.249822
+		0.242718 0.416505 0.340777
+		0.510204 0.269388 0.220408
+		0.294118 0.388235 0.317647
+		0.565611 0.238914 0.195475
+		0.342466 0.361644 0.29589
+		0.490196 0.280392 0.229412
+		0.277778 0.397222 0.325
+		0.555556 0.244444 0.2
+		0.333333 0.366667 0.3
+		0.609756 0.214634 0.17561
+		0.384615 0.338462 0.276923
+		0.545852 0.249782 0.204367
+		0.324675 0.371429 0.303896
+		0.609756 0.214634 0.17561
+		0.384615 0.338462 0.276923
+		0.661376 0.186243 0.152381
+		0.438596 0.308772 0.252632
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>FastingGlucose</FOR>
+	<GIVEN>InsulinResistance</GIVEN>
+	<GIVEN>Age</GIVEN>
+	<TABLE>
+		0.85 0.0825 0.0675
+		0.75 0.1375 0.1125
+		0.65 0.1925 0.1575
+		0.55 0.2475 0.2025
+		0.45 0.3025 0.2475
+		0.35 0.3575 0.2925
+		0.2 0.44 0.36
+		0.1 0.495 0.405
+		0.08 0.506 0.414
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>HbA1c</FOR>
+	<GIVEN>InsulinResistance</GIVEN>
+	<GIVEN>FastingGlucose</GIVEN>
+	<TABLE>
+		0.72 0.11 0.17
+		0.52 0.14 0.34
+		0.37 0.1625 0.4675
+		0.62 0.125 0.255
+		0.42 0.155 0.425
+		0.27 0.1775 0.5525
+		0.52 0.14 0.34
+		0.32 0.17 0.51
+		0.17 0.1925 0.6375
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>MetabolicSyndrome</FOR>
+	<GIVEN>BloodPressure</GIVEN>
+	<GIVEN>Cholesterol</GIVEN>
+	<GIVEN>BMI</GIVEN>
+	<GIVEN>FastingGlucose</GIVEN>
+	<TABLE>
+		0.98 0.02
+		0.98 0.02
+		0.98 0.02
+		0.98 0.02
+		0.98 0.02
+		0.98 0.02
+		0.98 0.02
+		0.8 0.2
+		0.8 0.2
+		0.98 0.02
+		0.98 0.02
+		0.98 0.02
+		0.98 0.02
+		0.98 0.02
+		0.98 0.02
+		0.98 0.02
+		0.8 0.2
+		0.8 0.2
+		0.98 0.02
+		0.8 0.2
+		0.8 0.2
+		0.98 0.02
+		0.8 0.2
+		0.8 0.2
+		0.8 0.2
+		0.05 0.95
+		0.05 0.95
+		0.98 0.02
+		0.8 0.2
+		0.8 0.2
+		0.98 0.02
+		0.8 0.2
+		0.8 0.2
+		0.8 0.2
+		0.05 0.95
+		0.05 0.95
+		0.98 0.02
+		0.8 0.2
+		0.8 0.2
+		0.98 0.02
+		0.8 0.2
+		0.8 0.2
+		0.8 0.2
+		0.05 0.95
+		0.05 0.95
+		0.8 0.2
+		0.05 0.95
+		0.05 0.95
+		0.8 0.2
+		0.05 0.95
+		0.05 0.95
+		0.05 0.95
+		0.05 0.95
+		0.05 0.95
+		0.98 0.02
+		0.8 0.2
+		0.8 0.2
+		0.98 0.02
+		0.8 0.2
+		0.8 0.2
+		0.8 0.2
+		0.05 0.95
+		0.05 0.95
+		0.98 0.02
+		0.8 0.2
+		0.8 0.2
+		0.98 0.02
+		0.8 0.2
+		0.8 0.2
+		0.8 0.2
+		0.05 0.95
+		0.05 0.95
+		0.8 0.2
+		0.05 0.95
+		0.05 0.95
+		0.8 0.2
+		0.05 0.95
+		0.05 0.95
+		0.05 0.95
+		0.05 0.95
+		0.05 0.95
+	</TABLE>
+</DEFINITION>
+<DEFINITION>
+	<FOR>DiabetesRisk</FOR>
+	<GIVEN>InsulinResistance</GIVEN>
+	<GIVEN>MetabolicSyndrome</GIVEN>
+	<GIVEN>Age</GIVEN>
+	<GIVEN>FamilyHistory</GIVEN>
+	<GIVEN>HbA1c</GIVEN>
+	<TABLE>
+		0.85 0.12 0.02 0.01
+		0.5 0.35 0.12 0.03
+		0.1 0.25 0.4 0.25
+		0.5 0.35 0.12 0.03
+		0.25 0.35 0.3 0.1
+		0.03 0.12 0.35 0.5
+		0.85 0.12 0.02 0.01
+		0.25 0.35 0.3 0.1
+		0.03 0.12 0.35 0.5
+		0.5 0.35 0.12 0.03
+		0.1 0.25 0.4 0.25
+		0.03 0.12 0.35 0.5
+		0.85 0.12 0.02 0.01
+		0.25 0.35 0.3 0.1
+		0.03 0.12 0.35 0.5
+		0.5 0.35 0.12 0.03
+		0.1 0.25 0.4 0.25
+		0.03 0.12 0.35 0.5
+		0.5 0.35 0.12 0.03
+		0.25 0.35 0.3 0.1
+		0.03 0.12 0.35 0.5
+		0.25 0.35 0.3 0.1
+		0.1 0.25 0.4 0.25
+		0.03 0.12 0.35 0.5
+		0.5 0.35 0.12 0.03
+		0.1 0.25 0.4 0.25
+		0.03 0.12 0.35 0.5
+		0.25 0.35 0.3 0.1
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.25 0.35 0.3 0.1
+		0.1 0.25 0.4 0.25
+		0.03 0.12 0.35 0.5
+		0.1 0.25 0.4 0.25
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.5 0.35 0.12 0.03
+		0.25 0.35 0.3 0.1
+		0.03 0.12 0.35 0.5
+		0.25 0.35 0.3 0.1
+		0.1 0.25 0.4 0.25
+		0.03 0.12 0.35 0.5
+		0.5 0.35 0.12 0.03
+		0.1 0.25 0.4 0.25
+		0.03 0.12 0.35 0.5
+		0.25 0.35 0.3 0.1
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.5 0.35 0.12 0.03
+		0.1 0.25 0.4 0.25
+		0.03 0.12 0.35 0.5
+		0.25 0.35 0.3 0.1
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.25 0.35 0.3 0.1
+		0.1 0.25 0.4 0.25
+		0.03 0.12 0.35 0.5
+		0.1 0.25 0.4 0.25
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.25 0.35 0.3 0.1
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.1 0.25 0.4 0.25
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.1 0.25 0.4 0.25
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.25 0.35 0.3 0.1
+		0.1 0.25 0.4 0.25
+		0.03 0.12 0.35 0.5
+		0.1 0.25 0.4 0.25
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.25 0.35 0.3 0.1
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.1 0.25 0.4 0.25
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.25 0.35 0.3 0.1
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.1 0.25 0.4 0.25
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.1 0.25 0.4 0.25
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.1 0.25 0.4 0.25
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+		0.03 0.12 0.35 0.5
+	</TABLE>
+</DEFINITION>
+
+</NETWORK>
+</BIF>

@@ -1,0 +1,26 @@
+======================================================================
+INFLUENCE DIAGRAM - DECISION ANALYSIS RESULTS
+======================================================================
+
+Expected Utilities by Risk Level and Intervention
+----------------------------------------------------------------------
+
+Risk Level         None     Diet     Combined   Metformin  Comb+Met  
+---------------------------------------------------------------------------
+Low Risk           4.41     4.07     3.63       3.92       3.23      
+Moderate Risk      4.31     4.00     3.57       3.84       3.21      
+High Risk          4.16     3.89     3.49       3.73       3.16      
+Very High Risk     4.01     3.77     3.40       3.61       3.11      
+
+======================================================================
+KEY FINDINGS
+----------------------------------------------------------------------
+• Low Risk: No intervention optimal (utilities: health gain < intervention cost)
+• Moderate Risk: Diet or combined lifestyle intervention optimal
+• High Risk: Combined lifestyle or Metformin comparable
+• Very High Risk: Combined + Metformin clearly superior
+
+Intervention Effectiveness (from Diabetes Prevention Program):
+  - Lifestyle intervention: 58% risk reduction
+  - Metformin: 31% risk reduction
+  - Combined approach: ~70% risk reduction (with adherence)
