@@ -1,5 +1,7 @@
 """
 Type 2 Diabetes Risk Assessment and Management Decision Network
+Authors: Ryan Shapiro, Ben Ruijsch van Dugteren, Nathan Wells
+Date: June 2024
 """
 
 import pyagrum as gum
@@ -50,8 +52,8 @@ arcs = [
 for parent, child in arcs:
     bn.addArc(parent, child)
 
-print(f"✓ Network: {bn.size()} nodes, {bn.sizeArcs()} arcs")
-print("✓ Filling probability tables...")
+print(f"Network: {bn.size()} nodes, {bn.sizeArcs()} arcs")
+print("Filling probability tables...")
 
 # Prior probabilities
 bn.cpt('Age')[:] = [0.35, 0.40, 0.25]
@@ -60,16 +62,19 @@ bn.cpt('PhysicalActivity')[:] = [0.30, 0.35, 0.25, 0.10]
 bn.cpt('DietQuality')[:] = [0.25, 0.50, 0.25]
 bn.cpt('Smoking')[:] = [0.82, 0.18]
 
+# Helper function to normalize probabilities
 def normalize(probs):
     total = sum(probs)
     return [p/total for p in probs]
+
+#calculate conditional probabilities based on literature and expert opinion:
 
 # P(BMI | PhysicalActivity, DietQuality, Age)
 pa_scores = {'Active': 30, 'Moderate': 20, 'Light': 10, 'Sedentary': 0}
 diet_scores = {'Good': 20, 'Fair': 10, 'Poor': 0}
 age_penalty = {'Young': 0, 'Middle': 10, 'Senior': 20}
 
-for pa in ['Sedentary', 'Light', 'Moderate', 'Active']:
+for pa in ['Sedentary', 'Light', 'Moderate', 'Active']: 
     for diet in ['Poor', 'Fair', 'Good']:
         for age in ['Young', 'Middle', 'Senior']:
             health_score = pa_scores[pa] + diet_scores[diet] - age_penalty[age]
@@ -191,8 +196,8 @@ for ir in ['Low', 'Moderate', 'High']:
                                             'Age': age, 'FamilyHistory': fh, 'HbA1c': hba1c}] = probs
 
 os.makedirs('models', exist_ok=True)
-gum.saveBN(bn, 'models/diabetes_bn.bifxml')
-print("✓ Bayesian Network complete\n")
+gum.saveBN(bn, 'models/diabetes_bn.bifxml') # Save the Bayesian Network
+print("Bayesian Network complete\n")
 
 # ============================================================================
 # BUILD INFLUENCE DIAGRAM WITH LITERATURE-BASED UTILITIES
@@ -202,7 +207,7 @@ print("="*70)
 print("BUILDING INFLUENCE DIAGRAM")
 print("="*70)
 
-id_model = gum.InfluenceDiagram()
+id_model = gum.InfluenceDiagram() # Create empty influence diagram
 
 # Copy BN structure
 for node_id in bn.nodes():
@@ -276,17 +281,17 @@ for risk in ['Low', 'Moderate', 'High', 'VeryHigh']:
             p_controlled = final_risk * 0.70
             p_uncontrolled = final_risk * 0.30
             
-            id_model.cpt('FutureDiabetesStatus')[{'DiabetesRisk': risk, 
-                                                   'LifestyleIntervention': lifestyle,
-                                                   'MedicalIntervention': medical}] = \
-                [p_no_diabetes, p_controlled, p_uncontrolled]
+            id_model.cpt('FutureDiabetesStatus')[{'DiabetesRisk': risk, 'LifestyleIntervention': lifestyle,'MedicalIntervention': medical}] = [p_no_diabetes, p_controlled, p_uncontrolled]
 
 # ============================================================================
 # FILL UTILITIES - CAREFULLY CALIBRATED VALUES
 # ============================================================================
 
 # Health utilities from Clarke et al. 2002 (UKPDS 62) - EQ-5D utilities
-# Scaled to 0-100 range: No diabetes (0.785→78.5), Controlled (0.650→65.0), Uncontrolled (0.550→55.0)
+# Scaled to 0-100 range: 
+# No diabetes (0.785→78.5), 
+# Controlled (0.650→65.0), 
+# Uncontrolled (0.550→55.0)
 id_model.utility('HealthUtility')[{'FutureDiabetesStatus': 'NoDiabetes'}] = [78.5]
 id_model.utility('HealthUtility')[{'FutureDiabetesStatus': 'Controlled'}] = [65.0]
 id_model.utility('HealthUtility')[{'FutureDiabetesStatus': 'Uncontrolled'}] = [55.0]
@@ -366,6 +371,7 @@ print("="*70)
 print("COMPUTING EXPECTED UTILITIES FOR TABLE 4")
 print("="*70)
 
+# Define scenarios
 risk_scenarios = {
     'Low': {'Age': 'Young', 'PhysicalActivity': 'Active', 'DietQuality': 'Good', 
             'BMI': 'Normal', 'FamilyHistory': 'No', 'HbA1c': 'Normal'},
@@ -377,6 +383,7 @@ risk_scenarios = {
                  'BMI': 'Obese', 'FamilyHistory': 'Yes', 'HbA1c': 'Diabetic'}
 }
 
+# Define interventions
 interventions = {
     'None': {'LifestyleIntervention': 'None', 'MedicalIntervention': 'None', 'MonitoringFrequency': 'Annual'},
     'Diet': {'LifestyleIntervention': 'Diet', 'MedicalIntervention': 'None', 'MonitoringFrequency': 'Biannual'},
@@ -385,22 +392,23 @@ interventions = {
     'Combined+Metformin': {'LifestyleIntervention': 'Combined', 'MedicalIntervention': 'Metformin', 'MonitoringFrequency': 'Quarterly'}
 }
 
+# Compute expected utilities
 results_table = {}
 
-for risk_name, risk_evidence in risk_scenarios.items():
+for risk_name, risk_evidence in risk_scenarios.items(): # Each risk level
     results_table[risk_name] = {}
     
-    for interv_name, interv_decisions in interventions.items():
+    for interv_name, interv_decisions in interventions.items(): # Each intervention
         full_evidence = risk_evidence.copy()
         full_evidence.update(interv_decisions)
         
-        try:
+        try: # Some combinations may be invalid
             ie_id = gum.ShaferShenoyLIMIDInference(id_model)
             ie_id.setEvidence(full_evidence)
             ie_id.makeInference()
             
             future_post = ie_id.posterior('FutureDiabetesStatus')
-            health_utils = [78.5, 65.0, 55.0]  # Changed from [100.0, 85.0, 65.0]
+            health_utils = [78.5, 65.0, 55.0] 
             expected_health = sum(future_post[i] * health_utils[i] for i in range(3))
                         
             cost_util = id_model.utility('CostUtility')[full_evidence][0]
@@ -451,9 +459,9 @@ with open('models/diabetes_id.dot', 'w') as f:
 try:
     subprocess.run(['dot', '-Tpng', 'models/diabetes_bn.dot', '-o', 'models/diabetes_bn.png'], check=True)
     subprocess.run(['dot', '-Tpng', 'models/diabetes_id.dot', '-o', 'models/diabetes_id.png'], check=True)
-    print("✓ Network visualizations created\n")
+    print("Network visualizations created\n")
 except:
-    print("⚠ Could not generate images (install graphviz)\n")
+    print("Could not generate images (install graphviz)\n")
 
 # ============================================================================
 # INTERACTIVE RISK ASSESSMENT
@@ -464,6 +472,8 @@ print("INTERACTIVE DIABETES RISK ASSESSMENT")
 print("="*70)
 
 def get_user_input():
+
+    # Gather user input with validation
     print("\nEnter patient information:")
     
     age = input("Age (Young/Middle/Senior): ").strip().capitalize()
@@ -494,6 +504,7 @@ def get_user_input():
     if hba1c and hba1c not in ['Normal', 'Prediabetic', 'Diabetic']:
         hba1c = ''
     
+    # Return collected evidence
     return {
         'Age': age,
         'FamilyHistory': family_history,
@@ -505,12 +516,15 @@ def get_user_input():
     }
 
 def run_assessment(evidence):
-    ie = gum.LazyPropagation(bn)
+    # Perform inference and recommend interventions
+    ie = gum.LazyPropagation(bn) # Inference engine
     
-    clean_evidence = {k: v for k, v in evidence.items() if v is not None}
+    # Set evidence
+    clean_evidence = {k: v for k, v in evidence.items() if v is not None} # Remove None values
     ie.setEvidence(clean_evidence)
     ie.makeInference()
     
+    # Get posteriors
     risk_post = ie.posterior('DiabetesRisk')
     ir_post = ie.posterior('InsulinResistance')
     ms_post = ie.posterior('MetabolicSyndrome')
@@ -529,6 +543,7 @@ def run_assessment(evidence):
     
     print(f"\nMetabolic Syndrome: {ms_post[1]*100:.2f}% probability")
     
+    # Determine risk category
     risk_probs = [risk_post[i] for i in range(4)]
     max_risk_idx = int(np.argmax(risk_probs))
     risk_category = ['Low', 'Moderate', 'High', 'VeryHigh'][max_risk_idx]
@@ -537,6 +552,7 @@ def run_assessment(evidence):
     print("RECOMMENDED INTERVENTION")
     print("="*70)
     
+    # Lifestyle intervention analysis
     baseline_high_risk = risk_post[2] + risk_post[3]
     
     factors_to_test = {
@@ -545,6 +561,7 @@ def run_assessment(evidence):
         'BMI': ['Obese', 'Overweight', 'Normal']
     }
     
+    # Calculate benefits of modifying each factor
     factor_benefits = {}
     
     for factor, values in factors_to_test.items():
@@ -569,12 +586,15 @@ def run_assessment(evidence):
             else:
                 factor_benefits[factor] = 0
     
+    # Decide on lifestyle intervention
     activity_benefit = factor_benefits.get('PhysicalActivity', 0)
     diet_benefit = factor_benefits.get('DietQuality', 0)
     bmi_benefit = factor_benefits.get('BMI', 0)
     
+    # Combine benefits conservatively
     total_lifestyle_benefit = max(activity_benefit + diet_benefit, bmi_benefit)
     
+    # Check if lifestyle is modifiable
     current_activity = clean_evidence.get('PhysicalActivity', 'Unknown')
     current_diet = clean_evidence.get('DietQuality', 'Unknown')
     current_bmi = clean_evidence.get('BMI', 'Unknown')
@@ -602,6 +622,7 @@ def run_assessment(evidence):
     p_mod_high_ir = ir_post[1] + ir_post[2]
     p_ms = ms_post[1]
     
+    # Determine medical intervention
     metabolic_risk = (total_lifestyle_benefit < 0.10 and baseline_high_risk > 0.40)
     
     if baseline_high_risk < 0.20:
@@ -617,6 +638,7 @@ def run_assessment(evidence):
     else:
         medical = 'None'
     
+    # Determine monitoring frequency
     monitoring = 'Quarterly' if baseline_high_risk > 0.35 else ('Biannual' if baseline_high_risk > 0.20 else 'Annual')
     
     print(f"\nLifestyle Intervention: {lifestyle}")
@@ -700,13 +722,15 @@ guideline_cases = [
 
 # Main loop
 while True:
+    # User menu
     choice = input("\n[1] Assess patient risk\n[2] Run predefined test cases\n[3] Run guideline validation\n[4] Exit\n\nChoice: ").strip()
     
-    if choice == '1':
+    # Execute based on choice
+    if choice == '1': # Interactive assessment
         evidence = get_user_input()
         run_assessment(evidence)
     
-    elif choice == '2':
+    elif choice == '2':# Predefined test cases
         print("\n" + "="*70)
         print("RUNNING PREDEFINED TEST CASES")
         print("="*70)
@@ -733,7 +757,7 @@ while True:
             print(f"\n--- {test['name']} ---")
             run_assessment(test['evidence'])
     
-    elif choice == '3':
+    elif choice == '3': # Guideline validation
         print("\n" + "="*70)
         print("GUIDELINE VALIDATION TEST CASES")
         print("="*70)
@@ -752,7 +776,7 @@ while True:
             
             input("\nPress Enter to continue to next case...")
     
-    elif choice == '4':
+    elif choice == '4': # Exit
         print("\nExiting. Models saved in ./models/")
         break
     
