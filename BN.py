@@ -1,7 +1,7 @@
 """
 Type 2 Diabetes Risk Assessment and Management Decision Network
 Authors: Ryan Shapiro, Ben Ruijsch van Dugteren, Nathan Wells
-Date: June 2024
+Date: October 2025
 """
 
 import pyagrum as gum
@@ -368,7 +368,7 @@ id_model.saveBIFXML('models/diabetes_id.bifxml')
 # ============================================================================
 
 print("="*70)
-print("COMPUTING EXPECTED UTILITIES FOR TABLE 4")
+print("COMPUTING EXPECTED UTILITIES")
 print("="*70)
 
 # Define scenarios
@@ -421,7 +421,7 @@ for risk_name, risk_evidence in risk_scenarios.items(): # Each risk level
         except Exception as e:
             results_table[risk_name][interv_name] = None
 
-print("\nTable 4: Expected Utilities by Risk Level and Intervention Strategy")
+print("\nExpected Utilities by Risk Level and Intervention Strategy")
 print("="*90)
 print(f"{'Risk Level':<15} {'None':>8} {'Diet':>8} {'Combined':>10} {'Metformin':>10} {'Comb+Met':>10}")
 print("-"*90)
